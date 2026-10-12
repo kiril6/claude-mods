@@ -2,6 +2,10 @@
 
 Eleven mods for [Claude Code](https://claude.com/claude-code). Install the ones you want; each is independent.
 
+![pixel-pet in action: sleeping, waking, narrating, hatching helpers](docs/promo/pixel-pet-promo.gif)
+
+[Watch it in 1080p](docs/promo/pixel-pet-promo.mp4)
+
 ## Repo Radar
 
 ![Repo Radar: a live map of where Claude is working](docs/repo-radar.png)
