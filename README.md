@@ -2,7 +2,7 @@
 
 Eleven mods for [Claude Code](https://claude.com/claude-code). Install the ones you want; each is independent.
 
-![pixel-pet in action: sleeping, waking, narrating, hatching helpers](docs/promo/pixel-pet-promo.gif)
+![pixel-pet in action: sleeping, waking, narrating, hatching helpers](docs/promo/pixel-pet-0.3.gif)
 
 [▶ Watch the 50-second tour with sound](docs/promo/pixel-pet-promo-voiceover.mp4) · [What's new in 0.3](docs/promo/pixel-pet-whats-new.mp4)
 
@@ -19,7 +19,7 @@ Eleven mods for [Claude Code](https://claude.com/claude-code). Install the ones 
 
 ## For fun
 
-![pixel-pet: the pet in its world, its status line, helpers and the context meter](docs/pixel-pet-band.png)
+![pixel-pet: the pet in its world, its status line, helpers and the context meter](docs/pixel-pet-band-0.3.png)
 
 | Mod | What it does |
 | --- | --- |
