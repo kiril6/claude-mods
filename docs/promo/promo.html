@@ -1,210 +1,126 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>pixel-pet promo</title>
-<style>
-  * { box-sizing: border-box; margin: 0; }
-  html, body { width: 1280px; height: 720px; overflow: hidden; background: #0b0d12; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Inter, sans-serif; color: #e9e9ee; -webkit-font-smoothing: antialiased; }
-  #stage { position: relative; width: 1280px; height: 720px; overflow: hidden; background: radial-gradient(120% 90% at 50% 40%, #151925 0%, #0b0d12 70%); }
-  .blob { position: absolute; width: 640px; height: 640px; border-radius: 50%; filter: blur(90px); opacity: .35; }
-  #b1 { background: #2dd4bf; } #b2 { background: #d97757; } #b3 { background: #8b5cf6; opacity: .22; }
-  .grain { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 3px 3px; pointer-events: none; }
-  .layer { position: absolute; inset: 0; opacity: 0; transform-origin: 50% 50%; }
-  .center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  h1 { font-size: 84px; font-weight: 800; letter-spacing: -3px; background: linear-gradient(90deg, #5eead4, #a5b4fc 55%, #f0a58a); -webkit-background-clip: text; color: transparent; }
-  .tag { font-size: 26px; color: #a9adbb; font-weight: 500; letter-spacing: -.3px; }
-  /* the app window */
-  #app { position: absolute; left: 0; top: 0; width: 1000px; height: 600px; border-radius: 16px; background: #1f1f22; border: 1px solid #34343a; box-shadow: 0 40px 120px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03); overflow: hidden; transform-origin: 0 0; }
-  .bar { height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: #19191c; border-bottom: 1px solid #2c2c31; font-size: 13px; color: #8a8a94; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; } .bar span { margin-left: 12px; }
-  .msg { position: absolute; font-size: 14px; line-height: 21px; color: #cfcfd6; }
-  .ghost { height: 9px; border-radius: 5px; background: #2e2e34; margin: 9px 0; }
-  .user { position: absolute; right: 28px; top: 250px; padding: 10px 14px; background: #2d2d33; border-radius: 12px; font-size: 14px; opacity: 0; }
-  #prompt { position: absolute; left: 20px; right: 20px; top: 510px; height: 64px; border: 1px solid #3a3a42; border-radius: 14px; background: #232327; padding: 12px 16px; font-size: 15px; color: #ededf2; }
-  #prompt .ph { color: #6d6d78; } .caret { display: inline-block; width: 2px; height: 18px; background: #d97757; vertical-align: -3px; margin-left: 1px; }
-  .slot { position: absolute; line-height: 0; }
-  .center .slot, .cell .slot { position: relative; }
-  #card { position: absolute; padding: 8px 12px; border-radius: 9px; background: #2b2b30; border: 1px solid #3c3c44; font-size: 12.5px; line-height: 19px; color: #e6e6e6; box-shadow: 0 12px 30px rgba(0,0,0,.5); opacity: 0; width: 330px; transform-origin: 95% 100%; }
-  #card div:first-child { font-weight: 600; }
-  .cursor { position: absolute; width: 22px; height: 22px; opacity: 0; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
-  /* captions */
-  .cap { position: absolute; left: 50%; bottom: 46px; padding: 14px 26px; border-radius: 999px; background: rgba(22,24,32,.72); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.08); font-size: 26px; font-weight: 650; letter-spacing: -.4px; white-space: nowrap; opacity: 0; box-shadow: 0 10px 40px rgba(0,0,0,.45); }
-  .cap em { font-style: normal; color: #5eead4; }
-  /* colours */
-  #grid { position: absolute; left: 50%; top: 168px; width: 896px; margin-left: -448px; display: grid; grid-template-columns: repeat(7, 128px); row-gap: 14px; }
-  .cell { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; color: #9a9aa6; }
-  .heading { position: absolute; left: 0; right: 0; text-align: center; }
-  .heading b { display: block; font-size: 48px; font-weight: 800; letter-spacing: -1.6px; }
-  .heading span { font-size: 20px; color: #a9adbb; }
-  code { font-family: 'SF Mono', Menlo, monospace; }
-  .code { background: #15171e; border: 1px solid #2c2f3a; border-radius: 14px; padding: 18px 26px; font-size: 21px; line-height: 34px; color: #d6d8e0; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
-  .code i { font-style: normal; color: #5eead4; } .code s { text-decoration: none; color: #6b7080; }
-  .chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
-  .chip { padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); font-size: 17px; color: #c8cad4; }
-  .heart { position: absolute; font-size: 44px; color: #ff6b9d; opacity: 0; text-shadow: 0 0 20px rgba(255,107,157,.6); }
-  .ripple { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #ff9cc2; opacity: 0; }
-</style>
+<link rel="stylesheet" href="style.css">
 <div id="stage">
   <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div>
 
-  <!-- 1. hero -->
-  <div class="layer center" id="intro" style="gap: 26px">
-    <div class="slot" id="hero"></div>
+  <div class="layer center" id="intro" style="gap: 30px">
+    <div class="big" style="transform: scale(4.2); margin: 80px 0 70px"><div id="hero"></div></div>
     <h1 id="title">pixel-pet</h1>
     <div class="tag" id="tagline">a tiny friend that lives above your Claude Code prompt</div>
   </div>
 
-  <!-- 2. the app -->
   <div class="layer" id="appLayer">
     <div id="app">
       <div class="bar"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><span>~/Projects/shop · Claude Code</span></div>
-      <div class="msg" style="left:28px;top:64px;width:600px">
-        <div style="color:#8a8a94;font-size:12px;margin-bottom:6px">Claude</div>
-        Done. The checkout page now validates the coupon before applying it.
-        <div class="ghost" style="width:520px"></div><div class="ghost" style="width:430px"></div><div class="ghost" style="width:470px"></div>
-      </div>
-      <div class="user" id="userMsg">the login test is flaky, can you fix it?</div>
-      <div class="msg" id="reply" style="left:28px;top:304px;width:600px;opacity:0">
-        <div style="color:#8a8a94;font-size:12px;margin-bottom:6px">Claude</div>
-        Looking at the login flow and its test…
-        <div class="ghost" style="width:380px"></div>
-      </div>
-      <div class="slot" id="pet" style="left:30px;top:442px"></div>
-      <div class="slot" id="line1" style="left:94px;top:440px"></div>
-      <div class="slot" id="line2" style="left:94px;top:459px"></div>
-      <div id="card"></div>
+      <div class="msg" style="left:28px;top:62px;width:600px"><div class="who">Claude</div>Done. The checkout page now validates the coupon before applying it.<div class="ghost" style="width:520px"></div><div class="ghost" style="width:430px"></div></div>
+      <div class="user" id="userMsg">the login test is flaky, can you fix it and deploy?</div>
+      <div class="msg" id="reply" style="left:28px;top:272px;width:600px;opacity:0"><div class="who">Claude</div>Looking at the login flow and its test…</div>
+      <div id="dialog"><div>Allow Claude to run <code>npm run deploy</code>?</div><div class="btns"><span class="btn yes" id="yes">Yes</span><span class="btn">No</span></div></div>
+      <div class="band"><div id="pet"></div><div class="l1" id="line1"></div><div class="l2" id="line2"></div></div>
       <div id="prompt"><span id="typed"></span><span class="caret" id="caret"></span></div>
     </div>
     <svg class="cursor" id="cur1" viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.4 L13.4 19.2 L10.4 12.8 L16.5 12.6 Z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg>
   </div>
 
-  <!-- 3. colours -->
+  <div class="layer center" id="dayLayer">
+    <div class="heading" style="top:54px"><b>Its world follows your day</b><span>on by default · <code>/pet scene off</code> for just the pet</span></div>
+    <div class="big" id="dayZoom" style="transform: scale(4); margin-top: 60px"><div id="dayBig"></div></div>
+    <div style="height:140px"></div>
+    <div class="clock" id="clock">07:30</div>
+    <div class="timeline"><i id="sun"></i></div>
+    <div class="stops"><span>morning · meadow</span><span>afternoon · desert</span><span>evening · savanna</span><span>night · skyline</span><span>midnight · moon</span></div>
+  </div>
+
   <div class="layer" id="colors">
-    <div class="heading" style="top:56px"><b>28 colours</b><span><code>/pet color pink</code> tries each one on as you type</span></div>
+    <div class="heading" style="top:54px"><b>28 colours, hats for the season</b><span><code>/pet color pink</code> tries each one on as you type</span></div>
     <div id="grid"></div>
   </div>
 
-  <!-- 4. click to pet -->
-  <div class="layer center" id="click">
-    <div class="slot" id="bigPet"></div>
+  <div class="layer" id="cardLayer">
+    <div class="heading" style="top:54px"><b>Pet it. Share it.</b><span><code>/pet card</code> saves a picture of your pet in its world</span></div>
+    <div class="big" id="petZoom" style="position:absolute; left:150px; top:250px; transform: scale(3.2); transform-origin: 0 0"><div id="petBig"></div></div>
     <div class="ripple" id="ripple"></div>
     <div class="heart" id="h1">♥</div><div class="heart" id="h2" style="font-size:30px">♥</div><div class="heart" id="h3" style="font-size:24px">♥</div>
+    <div id="cardWrap" style="left:600px; top:150px"><div id="card"></div></div>
     <svg class="cursor" id="cur2" viewBox="0 0 22 22" style="width:34px;height:34px"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.4 L13.4 19.2 L10.4 12.8 L16.5 12.6 Z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg>
   </div>
 
-  <!-- 5. outro -->
   <div class="layer center" id="outro" style="gap: 22px">
-    <div class="slot" id="outroPet"></div>
-    <h1 id="o1" style="font-size:72px">pixel-pet</h1>
+    <div class="big" id="o0" style="transform: scale(2.2); margin: 34px 0"><div id="outroPet"></div></div>
+    <h1 id="o1" style="font-size:76px">pixel-pet</h1>
     <div class="code" id="o2"><div><s>›</s> <i>/plugin</i> marketplace add lakmadev/pixel-pet</div><div><s>›</s> <i>/plugin</i> install pixel-pet@pixel-pet</div></div>
-    <div class="chips" id="o3"><span class="chip">💤 sleeps &amp; wakes</span><span class="chip">💬 narrates Claude</span><span class="chip">🐣 subagent helpers</span><span class="chip">📊 context + plan limits</span><span class="chip">🎨 28 colours</span><span class="chip">♥ pettable</span></div>
-    <div class="tag" id="o4" style="font-size:19px">Free &amp; open source · <b style="color:#e9e9ee">github.com/lakmadev/claude-mods</b></div>
+    <div class="chips" id="o3"><span class="chip">💤 sleeps &amp; wakes</span><span class="chip">💬 calm narration</span><span class="chip">✅ cheers on green tests</span><span class="chip">✋ waves when you're needed</span><span class="chip">🐣 subagent helpers</span><span class="chip">📊 context + limits</span><span class="chip">🌄 a world that follows your day</span><span class="chip">🎃 seasonal hats</span><span class="chip">🎨 28 colours</span><span class="chip">🖼️ share card</span><span class="chip">🔁 one pet everywhere</span></div>
+    <div class="tag" id="o4" style="font-size:19px">Free &amp; open source · <b style="color:#ecedf2">github.com/lakmadev/claude-mods</b></div>
   </div>
 
   <div id="caps"></div>
+  <div class="vignette"></div>
   <div class="grain"></div>
+  <div id="progress"></div>
 </div>
 <script src="assets.js"></script>
+<script src="engine.js"></script>
 <script>
-const $ = id => document.getElementById(id)
-const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
-const lerp = (a, b, k) => a + (b - a) * k
-const io = k => (k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2)
-const out = k => 1 - Math.pow(1 - k, 3)
-const back = k => { const c = 1.70158, d = k - 1; return 1 + (c + 1) * d * d * d + c * d * d }
-const prog = (t, a, ms) => clamp((t - a) / ms)
+const APP = 4600, TYPE = 6300, SEND = 8500, FAIL = 16200, EDIT2 = 17700, PASS = 18900, CALL = 21200, YES = 24300
+const HELP = 26200, LIMIT = 29000, DONE = 30300, DAY = 31200, COL = 36400, CARD = 40200, OUTRO = 43800, END = 50000
+const TEXT = 'the login test is flaky, can you fix it and deploy?'
+const P = A.pets
 
-// ---- timeline (ms) ----
-const APP = 4000, TYPE = 6300, SEND = 8500, H0 = 13000, COL = 23200, CLICK = 28400, OUTRO = 32200, END = 37500
-const TEXT = 'the login test is flaky, can you fix it?'
-
-// A slot that shows the latest clip whose time has come, with its SMIL clock set to the clip's age.
-function track(el, clips) {
-  let shown
-  return t => {
-    let clip
-    for (const c of clips) if (c.at <= t) clip = c
-    if (!clip) { if (shown) { el.innerHTML = ''; shown = undefined } return }
-    if (clip !== shown) { el.innerHTML = clip.svg; shown = clip; el.firstElementChild.pauseAnimations() }
-    el.firstElementChild.setCurrentTime(Math.max(0, t - clip.at) / 1000)
-  }
-}
-const tracks = [
-  track($('hero'), [{ at: 0, svg: A.hero }, { at: 2600, svg: A.heroWake }, { at: 3700, svg: A.heroHappy }]),
-  track($('pet'), [
-    { at: 0, svg: A.pet_sleepy }, { at: TYPE, svg: A.pet_waking }, { at: TYPE + 1200, svg: A.pet_readL }, { at: TYPE + 1700, svg: A.pet_read0 },
-    { at: TYPE + 2100, svg: A.pet_readR }, { at: SEND + 200, svg: A.pet_working }, { at: H0 + 8000, svg: A.pet_happy }]),
+const draws = [
+  habitat($('hero'), [{ at: 0, scene: 'moon' }], [], [{ at: 0, svg: P.heroSleep }, { at: 2700, svg: P.heroWake }, { at: 3800, svg: P.heroHappy }]),
+  habitat($('pet'), [{ at: 0, scene: 'meadow' }, { at: FAIL, scene: 'lava' }, { at: EDIT2, scene: 'meadow' }], [[SEND + 200, CALL], [YES + 200, DONE]], [
+    { at: 0, svg: P.sleepy }, { at: TYPE, svg: P.waking }, { at: TYPE + 1200, svg: P.readL }, { at: TYPE + 1700, svg: P.read0 }, { at: TYPE + 2200, svg: P.readR },
+    { at: SEND + 200, svg: P.working }, { at: FAIL, svg: P.oops }, { at: EDIT2, svg: P.working2 }, { at: PASS, svg: P.happy }, { at: CALL, svg: P.calling },
+    { at: YES + 200, svg: P.working3 }, { at: DONE, svg: P.happy2 }]),
   track($('line1'), [
-    { at: 0, svg: A.lines[0] }, { at: TYPE, svg: A.lines[1] }, { at: TYPE + 1200, svg: A.lines[2] }, { at: SEND + 400, svg: A.lines[3] },
-    { at: SEND + 1900, svg: A.lines[4] }, { at: SEND + 3200, svg: A.lines[5] }, { at: H0, svg: A.lines[6] }, { at: H0 + 6000, svg: A.lines[7] }, { at: H0 + 8000, svg: A.lines[8] }]),
-  track($('line2'), [{ at: 0, svg: A.line2[0].svg }, ...A.line2.slice(1).map(s => ({ at: H0 + s.at, svg: s.svg }))]),
-  track($('bigPet'), [{ at: 0, svg: A.idleBig }, { at: CLICK + 1500, svg: A.lovedBig }]),
-  track($('outroPet'), [{ at: 0, svg: A.heroHappy.replace(/width="260" height="208"/, 'width="130" height="104"') }]),
+    { at: 0, svg: A.lines[0] }, { at: TYPE, svg: A.lines[1] }, { at: TYPE + 1200, svg: A.lines[2] }, { at: SEND + 300, svg: A.lines[3] }, { at: SEND + 1900, svg: A.lines[4] },
+    { at: SEND + 3400, svg: A.lines[5] }, { at: FAIL, svg: A.lines[6] }, { at: EDIT2, svg: A.lines[7] }, { at: PASS, svg: A.lines[8] }, { at: CALL, svg: A.lines[9] },
+    { at: YES + 200, svg: A.lines[10] }, { at: HELP, svg: A.lines[11] }, { at: LIMIT, svg: A.lines[12] }, { at: DONE, svg: A.lines[13] }]),
+  track($('line2'), [{ at: 0, svg: A.line2[0].svg }, ...A.line2.slice(1).map(s => ({ at: HELP + s.at, svg: s.svg }))]),
+  habitat($('dayBig'), A.day.map((d, i) => ({ at: DAY + 300 + i * 1000, scene: d.scene })), [[DAY, COL]], [{ at: 0, svg: P.idleTeal }]),
+  habitat($('petBig'), [{ at: 0, scene: 'meadow' }], [], [{ at: 0, svg: P.idlePink }, { at: CARD + 1400, svg: P.lovedPink }]),
+  habitat($('outroPet'), [{ at: 0, scene: 'skyline' }], [[OUTRO - 500, END + 1000]], [{ at: 0, svg: P.happy2 }]),
 ]
-$('card').innerHTML = A.card.map(l => `<div>${l}</div>`).join('')
-$('grid').innerHTML = A.colors.map(c => `<div class="cell"><div class="slot">${c.svg}</div>${c.name}</div>`).join('')
+$('card').innerHTML = A.card
+$('grid').innerHTML = A.colors.map(c => `<div class="cell"><div class="s">${c.svg}</div>${c.name}</div>`).join('')
 const cells = [...document.querySelectorAll('.cell')]
 const gridSvgs = cells.map(c => c.querySelector('svg'))
-
-// Layers fade and zoom between scenes: in from a little small, out by growing and blurring.
-const layers = [['intro', 0, APP], ['appLayer', APP, COL], ['colors', COL, CLICK], ['click', CLICK, OUTRO], ['outro', OUTRO, END + 1000]]
-const FADE = 700
-function layer(t, [id, a, b]) {
-  const el = $(id)
-  const k = a === 0 ? 1 : io(prog(t, a - FADE / 2, FADE))
-  const o = io(prog(t, b - FADE / 2, FADE))
-  el.style.opacity = Math.min(k, 1 - o)
-  el.style.display = k <= 0 || o >= 1 ? 'none' : ''
-  el.style.filter = o > 0 ? `blur(${o * 10}px)` : k < 1 ? `blur(${(1 - k) * 6}px)` : ''
-  return { k, o, el }
-}
-
-// The camera over the app window: [time, scale, centre x, centre y] in window pixels.
+const layers = [['intro', 0, APP], ['appLayer', APP, DAY], ['dayLayer', DAY, COL], ['colors', COL, CARD], ['cardLayer', CARD, OUTRO], ['outro', OUTRO, END + 1000]]
 const CAM = [
-  [APP - 400, .86, 500, 300], [APP + 1300, .98, 500, 300], [TYPE - 200, 1.9, 330, 485], [SEND, 1.9, 330, 485],
-  [SEND + 700, 2.6, 250, 452], [H0 - 300, 2.6, 250, 452], [H0 + 600, 2.35, 290, 472], [H0 + 6900, 2.35, 300, 472],
-  [H0 + 7800, 2.05, 380, 405], [COL - 300, 2.05, 380, 405], [COL + 500, 2.6, 380, 405]]
-function camera(t) {
-  let i = 0
-  while (i < CAM.length - 1 && CAM[i + 1][0] <= t) i++
-  const a = CAM[i], b = CAM[Math.min(i + 1, CAM.length - 1)]
-  const k = b === a || t <= a[0] ? 0 : io(clamp((t - a[0]) / (b[0] - a[0])))
-  return [lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)]
-}
-
-const CAPS = [
-  [APP + 900, TYPE + 1900, 'It <em>sleeps</em> when things are quiet…'],
-  [TYPE + 2000, SEND + 300, '…and <em>wakes up</em> to read along as you type'],
-  [SEND + 500, H0 - 200, 'It <em>narrates</em> what Claude is doing'],
-  [H0 + 100, H0 + 6600, 'A little <em>helper</em> hatches for every subagent'],
-  [H0 + 6800, COL - 200, 'Context and plan limits, <em>at a glance</em>'],
-  [CLICK + 300, OUTRO - 300, '<em>Click</em> it to pet it ♥'],
-]
-$('caps').innerHTML = CAPS.map(c => `<div class="cap">${c[2]}</div>`).join('')
-const capEls = [...document.querySelectorAll('.cap')]
+  [APP - 400, .86, 500, 300], [APP + 1200, .98, 500, 300], [TYPE - 300, 1.75, 330, 470], [SEND, 1.75, 330, 470],
+  [SEND + 800, 2.3, 300, 452], [CALL - 500, 2.3, 300, 452], [CALL + 300, 1.55, 380, 385], [YES + 500, 1.55, 380, 385],
+  [HELP - 200, 1.75, 345, 452], [DAY - 700, 1.75, 345, 452], [DAY + 300, 2.4, 300, 452]]
+const caps = captions($('caps'), [
+  [APP + 700, TYPE + 1800, 'It <em>naps</em> when things are quiet…'],
+  [TYPE + 1900, SEND + 400, '…and <em>wakes up</em> to read along as you type'],
+  [SEND + 600, FAIL - 200, 'It <em>narrates</em> the work as its world scrolls by'],
+  [FAIL, EDIT2 + 300, 'It <span class="r">groans</span> when tests fail…'],
+  [EDIT2 + 500, CALL - 200, '…and <em>cheers</em> when they pass'],
+  [CALL + 200, YES + 600, 'It <span class="a">waves you over</span> when Claude needs your OK'],
+  [HELP + 100, LIMIT - 200, 'A tiny <em>helper</em> for every subagent'],
+  [LIMIT, DAY - 300, 'and a <span class="a">calm note</span> when your limits get close'],
+])
 
 function seek(t) {
-  // drifting light
-  $('b1').style.transform = `translate(${-120 + Math.sin(t / 2600) * 90}px, ${-160 + Math.cos(t / 3100) * 60}px)`
-  $('b2').style.transform = `translate(${780 + Math.cos(t / 2900) * 90}px, ${260 + Math.sin(t / 2300) * 70}px)`
-  $('b3').style.transform = `translate(${380 + Math.sin(t / 3700) * 140}px, ${420 + Math.cos(t / 3300) * 40}px)`
-  for (const tr of tracks) tr(t)
+  drift(t)
+  $('progress').style.width = `${(t / END) * 100}%`
+  for (const draw of draws) draw(t)
 
-  // 1. hero: a slow push out, the title rising in
   const intro = layer(t, layers[0])
-  intro.el.style.transform = `scale(${lerp(1.18, 1, out(prog(t, 0, 3600))) + intro.o * .25})`
-  for (const [id, at] of [['title', 700], ['tagline', 1100]]) {
+  intro.el.style.transform = `scale(${lerp(1.16, 1, out(prog(t, 0, 3800))) + intro.o * .25})`
+  for (const [id, at] of [['title', 800], ['tagline', 1200]]) {
     const k = out(prog(t, at, 900))
     $(id).style.opacity = k
     $(id).style.transform = `translateY(${(1 - k) * 30}px)`
   }
 
-  // 2. the app, filmed by the camera
-  const app = layer(t, layers[1])
-  const [s, cx, cy] = camera(t)
+  layer(t, layers[1])
+  const [s, cx, cy] = camera(CAM, t)
   $('app').style.transform = `translate(${640 - cx * s}px, ${360 - cy * s}px) scale(${s})`
-  const typed = Math.floor(clamp((t - TYPE) / 48, 0, TEXT.length))
-  $('typed').innerHTML = t < SEND ? (typed ? TEXT.slice(0, typed) : '<span class="ph">Reply to Claude…</span>') : '<span class="ph">Reply to Claude…</span>'
+  const typed = Math.floor(clamp((t - TYPE) / 42, 0, TEXT.length))
+  $('typed').innerHTML = t < SEND && typed ? TEXT.slice(0, typed) : '<span class="ph">Reply to Claude…</span>'
   $('caret').style.opacity = t > TYPE - 600 && t < SEND && (typed < TEXT.length || Math.floor(t / 500) % 2 === 0) ? 1 : 0
   const sent = out(prog(t, SEND, 450))
   $('userMsg').style.opacity = sent
@@ -212,67 +128,57 @@ function seek(t) {
   const reply = out(prog(t, SEND + 700, 500))
   $('reply').style.opacity = reply
   $('reply').style.transform = `translateY(${(1 - reply) * 10}px)`
-  // the hover card over ⓘ, pointed at by a cursor
-  const hov = H0 + 8600
-  const ck = back(prog(t, hov, 380)), cf = prog(t, hov, 200)
-  const card = $('card')
-  card.style.opacity = cf
-  card.style.transform = `scale(${.9 + .1 * ck})`
-  card.style.left = '230px'; card.style.top = `${450 - card.offsetHeight}px`
-  const cur = $('cur1'), mk = io(prog(t, hov - 900, 800))
-  const ix = 640 + (546 - cx) * s, iy = 360 + (470 - cy) * s
-  cur.style.opacity = clamp((t - hov + 1000) / 200) * (1 - prog(t, COL - 700, 300))
-  cur.style.transform = `translate(${lerp(ix + 160, ix, mk)}px, ${lerp(iy + 120, iy, mk)}px)`
+  const dIn = back(prog(t, CALL - 100, 420)), dOut = io(prog(t, YES + 150, 300))
+  $('dialog').style.opacity = clamp(prog(t, CALL - 100, 200)) * (1 - dOut)
+  $('dialog').style.transform = `translateY(${(1 - dIn) * 16 - dOut * 6}px) scale(${.96 + .04 * dIn})`
+  const press = t > YES - 80 && t < YES + 120
+  $('yes').style.filter = press ? 'brightness(1.3)' : ''
+  const cur = $('cur1'), ck = io(prog(t, CALL + 1300, 1100))
+  const yx = 640 + (52 - cx) * s, yy = 360 + (356 - cy) * s
+  cur.style.opacity = clamp((t - CALL - 1200) / 200) * (1 - prog(t, YES + 500, 300))
+  cur.style.transform = `translate(${lerp(yx + 260, yx, ck)}px, ${lerp(yy + 160, yy, ck)}px) scale(${press ? .86 : 1})`
 
-  // 3. colours: popping in one by one, then the camera dives at pink
-  const col = layer(t, layers[2])
-  cells.forEach((c, i) => {
-    const k = prog(t, COL + 200 + i * 45, 520)
+  const day = layer(t, layers[2])
+  day.el.style.transform = `scale(${lerp(.9, 1, out(day.k)) + day.o * .2})`
+  const i = clamp(Math.floor((t - DAY - 520) / 1000), 0, A.day.length - 1)
+  $('clock').textContent = `${A.day[i].clock} · ${A.day[i].name}`
+  $('sun').style.left = `${clamp((t - DAY - 300) / 5000) * 100}%`
+  $('dayZoom').style.transform = `scale(${4 + Math.sin(prog(t, DAY + 300 + i * 1000, 1000) * Math.PI) * .05})`
+
+  const col = layer(t, layers[3])
+  cells.forEach((c, n) => {
+    const k = prog(t, COL + 200 + n * 40, 520)
     c.style.opacity = clamp(k * 2)
     c.style.transform = `scale(${back(k)}) translateY(${(1 - out(k)) * 16}px)`
-    if (gridSvgs[i]) { gridSvgs[i].pauseAnimations(); gridSvgs[i].setCurrentTime(Math.max(0, t - COL) / 1000 + i * .13) }
+    if (gridSvgs[n]) { gridSvgs[n].pauseAnimations(); gridSvgs[n].setCurrentTime(Math.max(0, t - COL) / 1000 + n * .13) }
   })
-  const dive = io(prog(t, CLICK - 1100, 1100))
-  col.el.style.transformOrigin = '256px 302px'
-  col.el.style.transform = `translate(${384 * dive}px, ${58 * dive}px) scale(${1 + dive * 1.6})`
+  col.el.style.transform = `scale(${1 + col.o * .15})`
 
-  // 4. click to pet
-  const click = layer(t, layers[3])
-  click.el.style.transform = `scale(${lerp(.82, 1, out(click.k))})`
-  const tap = CLICK + 1500
-  const c2 = $('cur2'), ck2 = io(prog(t, CLICK + 400, 1000)), press = t > tap - 90 && t < tap + 110 ? .85 : 1
-  c2.style.opacity = clamp((t - CLICK - 300) / 250) * (1 - prog(t, OUTRO - 600, 300))
-  c2.style.transform = `translate(${lerp(980, 664, ck2)}px, ${lerp(620, 372, ck2)}px) scale(${press})`
-  c2.style.transformOrigin = '0 0'
+  const card = layer(t, layers[4])
+  const tap = CARD + 1400
+  const c2 = $('cur2'), k2 = io(prog(t, CARD + 300, 1000)), press2 = t > tap - 90 && t < tap + 110
+  c2.style.opacity = clamp((t - CARD - 200) / 250) * (1 - prog(t, tap + 600, 300))
+  c2.style.transform = `translate(${lerp(560, 270, k2)}px, ${lerp(620, 330, k2)}px) scale(${press2 ? .85 : 1})`
   const rp = prog(t, tap, 600)
-  Object.assign($('ripple').style, { left: '664px', top: '372px', opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `scale(${.3 + rp * 1.6})` })
+  Object.assign($('ripple').style, { left: '270px', top: '330px', opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `scale(${.3 + rp * 1.6})` })
   ;[['h1', 0, 0, 0], ['h2', 160, -46, 10], ['h3', 300, 44, -6]].forEach(([id, d, dx, rot]) => {
     const k = prog(t, tap + d, 1300)
-    Object.assign($(id).style, { left: `${630 + dx}px`, top: `${300 - out(k) * 120}px`, opacity: k > 0 && k < 1 ? Math.min(1, k * 5) * (1 - k) * 1.3 : 0, transform: `scale(${back(clamp(k * 2.5))}) rotate(${rot}deg)` })
+    Object.assign($(id).style, { left: `${250 + dx}px`, top: `${270 - out(k) * 120}px`, opacity: k > 0 && k < 1 ? Math.min(1, k * 5) * (1 - k) * 1.3 : 0, transform: `scale(${back(clamp(k * 2.5))}) rotate(${rot}deg)` })
   })
-  $('bigPet').style.transform = `scale(${1 + .06 * Math.sin(prog(t, tap, 400) * Math.PI)})`
+  $('petZoom').style.transform = `scale(${3.2 + .12 * Math.sin(prog(t, tap, 400) * Math.PI)})`
+  const cIn = back(prog(t, CARD + 1900, 800))
+  $('cardWrap').style.opacity = clamp(prog(t, CARD + 1900, 300))
+  $('cardWrap').style.transform = `translate(${(1 - cIn) * 260}px, ${(1 - cIn) * 40}px) rotate(${(1 - cIn) * 8 - 2}deg) scale(${.8 + .2 * cIn})`
+  card.el.style.transform = `scale(${1 + card.o * .15})`
 
-  // 5. outro
-  const outro = layer(t, layers[4])
+  const outro = layer(t, layers[5])
   outro.el.style.transform = `scale(${lerp(1.08, 1, out(prog(t, OUTRO - 350, 1600)))})`
-  ;['outroPet', 'o1', 'o2', 'o3', 'o4'].forEach((id, i) => {
-    const k = out(prog(t, OUTRO + i * 160, 700))
+  ;['o0', 'o1', 'o2', 'o3', 'o4'].forEach((id, n) => {
+    const k = out(prog(t, OUTRO + n * 160, 700))
     $(id).style.opacity = k
-    $(id).style.transform = `translateY(${(1 - k) * 24}px)`
+    $(id).style.translate = `0 ${(1 - k) * 24}px`
   })
-
-  // captions: rise in, lift away
-  CAPS.forEach(([a, b], i) => {
-    const k = out(prog(t, a, 500)), o = io(prog(t, b - 350, 350))
-    capEls[i].style.opacity = k * (1 - o)
-    capEls[i].style.transform = `translate(-50%, ${(1 - k) * 26 - o * 16}px) scale(${.96 + .04 * k})`
-  })
+  caps(t)
 }
-window.seek = seek
-window.DURATION = END
-if (!navigator.webdriver && location.hash !== '#still') {
-  const t0 = performance.now()
-  const loop = () => { seek((performance.now() - t0) % END); requestAnimationFrame(loop) }
-  loop()
-}
+run(seek, END)
 </script>

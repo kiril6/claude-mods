@@ -1,0 +1,60 @@
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1280px; height: 720px; overflow: hidden; background: #0a0c11; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Inter, sans-serif; color: #ecedf2; -webkit-font-smoothing: antialiased; }
+#stage { position: relative; width: 1280px; height: 720px; overflow: hidden; background: radial-gradient(120% 90% at 50% 40%, #141824 0%, #0a0c11 72%); }
+.blob { position: absolute; width: 680px; height: 680px; border-radius: 50%; filter: blur(100px); opacity: .32; }
+#b1 { background: #2dd4bf; } #b2 { background: #d97757; } #b3 { background: #8b5cf6; opacity: .2; }
+.vignette { position: absolute; inset: 0; background: radial-gradient(130% 100% at 50% 45%, transparent 55%, rgba(0,0,0,.55)); pointer-events: none; }
+.grain { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px); background-size: 3px 3px; pointer-events: none; }
+.layer { position: absolute; inset: 0; opacity: 0; transform-origin: 50% 50%; }
+.center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+h1 { font-size: 88px; font-weight: 800; letter-spacing: -3px; background: linear-gradient(90deg, #5eead4, #a5b4fc 55%, #f0a58a); -webkit-background-clip: text; color: transparent; line-height: 1.05; }
+.tag { font-size: 26px; color: #a9adbb; font-weight: 500; letter-spacing: -.3px; }
+code { font-family: 'SF Mono', Menlo, monospace; }
+/* the pet in its world, exactly as the plugin draws it */
+.hab { position: relative; width: 76px; height: 52px; border-radius: 12px; overflow: hidden; isolation: isolate; }
+.hab .scn { position: absolute; inset: 0; line-height: 0; }
+.hab .petin { position: absolute; left: 13px; top: 12px; line-height: 0; z-index: 3; }
+.big { transform-origin: 50% 50%; }
+/* app window */
+#app { position: absolute; left: 0; top: 0; width: 1000px; height: 600px; border-radius: 16px; background: #1b1b1e; border: 1px solid #34343a; box-shadow: 0 40px 120px rgba(0,0,0,.6); overflow: hidden; transform-origin: 0 0; }
+.bar { height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: #161618; border-bottom: 1px solid #2c2c31; font-size: 13px; color: #8a8a94; }
+.dot { width: 12px; height: 12px; border-radius: 50%; } .bar span { margin-left: 12px; }
+.msg { position: absolute; font-size: 14px; line-height: 21px; color: #cfcfd6; }
+.who { color: #8a8a94; font-size: 12px; margin-bottom: 6px; }
+.ghost { height: 9px; border-radius: 5px; background: #2a2a30; margin: 9px 0; }
+.user { position: absolute; right: 28px; top: 226px; padding: 10px 14px; background: #2d2d33; border-radius: 12px; font-size: 14px; opacity: 0; }
+/* the band's own rounded container above the prompt, as the desktop app draws it */
+.band { position: absolute; left: 16px; right: 16px; top: 410px; height: 84px; border-radius: 14px; background: #232326; }
+.band .hab { position: absolute; left: 14px; top: 16px; }
+.band .l1 { position: absolute; left: 104px; top: 23px; line-height: 0; }
+.band .l2 { position: absolute; left: 104px; top: 44px; line-height: 0; }
+#dialog { position: absolute; left: 28px; top: 304px; width: 560px; padding: 12px 14px; border-radius: 12px; background: #26262b; border: 1px solid #4a4a52; font-size: 13.5px; opacity: 0; }
+#dialog code { font-size: 12.5px; color: #fbbf24; }
+#dialog .btns { display: flex; gap: 8px; margin-top: 10px; }
+#dialog .btn { padding: 5px 14px; border-radius: 7px; background: #34343b; font-size: 13px; }
+#dialog .btn.yes { background: #d97757; color: #fff; }
+#prompt { position: absolute; left: 16px; right: 16px; top: 508px; height: 64px; border: 1px solid #3a3a42; border-radius: 14px; background: #202023; padding: 12px 16px; font-size: 15px; color: #ededf2; }
+#prompt .ph { color: #6d6d78; } .caret { display: inline-block; width: 2px; height: 18px; background: #d97757; vertical-align: -3px; margin-left: 1px; }
+.cursor { position: absolute; width: 22px; height: 22px; opacity: 0; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); transform-origin: 0 0; }
+.cap { position: absolute; left: 50%; bottom: 44px; padding: 14px 26px; border-radius: 999px; background: rgba(20,22,30,.74); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.09); font-size: 26px; font-weight: 650; letter-spacing: -.4px; white-space: nowrap; opacity: 0; box-shadow: 0 10px 40px rgba(0,0,0,.45); }
+.cap em { font-style: normal; color: #5eead4; } .cap .r { color: #f87171; } .cap .a { color: #fbbf24; }
+.heading { position: absolute; left: 0; right: 0; text-align: center; }
+.heading b { display: block; font-size: 48px; font-weight: 800; letter-spacing: -1.6px; }
+.heading span { font-size: 20px; color: #a9adbb; }
+.clock { font: 700 60px 'SF Pro Display', -apple-system, sans-serif; letter-spacing: -2px; font-variant-numeric: tabular-nums; }
+.timeline { position: relative; width: 640px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.1); margin-top: 20px; }
+.timeline i { position: absolute; top: -5px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: #fff; box-shadow: 0 0 18px rgba(255,255,255,.8); }
+.stops { display: flex; justify-content: space-between; width: 680px; margin-top: 12px; font-size: 15px; color: #8d91a3; }
+#grid { position: absolute; left: 50%; top: 172px; width: 896px; margin-left: -448px; display: grid; grid-template-columns: repeat(7, 128px); row-gap: 12px; }
+.cell { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13px; color: #9a9aa6; }
+.cell .s { line-height: 0; }
+#cardWrap { position: absolute; width: 600px; height: 315px; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.6); transform-origin: 50% 60%; }
+#cardWrap > div { transform: scale(.5); transform-origin: 0 0; }
+.heart { position: absolute; font-size: 44px; color: #ff6b9d; opacity: 0; text-shadow: 0 0 20px rgba(255,107,157,.6); }
+.ripple { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 3px solid #ff9cc2; opacity: 0; }
+.code { background: #14161d; border: 1px solid #2c2f3a; border-radius: 14px; padding: 16px 26px; font-size: 21px; line-height: 34px; color: #d6d8e0; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+.code i { font-style: normal; color: #5eead4; } .code s { text-decoration: none; color: #6b7080; }
+.chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 1000px; }
+.chip { padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09); font-size: 16px; color: #cbcdd7; }
+#progress { position: absolute; left: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, #5eead4, #a5b4fc, #f0a58a); opacity: .7; }

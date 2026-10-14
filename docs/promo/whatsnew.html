@@ -1,0 +1,201 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>pixel-pet: what's new</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .sband { position: absolute; left: 50%; top: 50%; right: auto; width: 640px; height: 84px; margin: -42px 0 0 -320px; box-shadow: 0 30px 80px rgba(0,0,0,.5); border: 1px solid #303036; }
+  .win { position: absolute; width: 360px; height: 170px; border-radius: 12px; background: #1b1b1e; border: 1px solid #34343a; box-shadow: 0 20px 60px rgba(0,0,0,.5); overflow: hidden; }
+  .win .bar { height: 28px; font-size: 12px; }
+  .win .band { left: 10px; right: 10px; top: 60px; }
+  .tip { position: absolute; left: 50%; transform: translateX(-50%); padding: 9px 18px; border-radius: 999px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); font-size: 19px; color: #d4d6de; white-space: nowrap; opacity: 0; }
+  .tip code { color: #5eead4; }
+  .chipcmd { width: 660px; display: flex; align-items: baseline; gap: 14px; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); font-size: 20px; color: #c9cbd5; opacity: 0; }
+  .chipcmd code { color: #5eead4; font-size: 20px; min-width: 210px; }
+  .version { padding: 6px 16px; border-radius: 999px; background: rgba(94,234,212,.12); border: 1px solid rgba(94,234,212,.35); color: #5eead4; font-weight: 700; font-size: 20px; }
+  .hatrow { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; gap: 250px; }
+  .hatrow > div { display: flex; flex-direction: column; align-items: center; gap: 92px; font-size: 20px; color: #a9adbb; opacity: 0; }
+</style>
+<div id="stage">
+  <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div>
+
+  <div class="layer center" id="s0" style="gap: 26px">
+    <div class="big" style="transform: scale(3.6); margin: 60px 0 56px"><div id="hero"></div></div>
+    <div class="tag" style="font-size:24px">What's new in</div>
+    <h1 style="margin-top:-14px">pixel-pet</h1>
+    <span class="version" id="ver">version 0.3</span>
+  </div>
+
+  <div class="layer center" id="s1">
+    <div class="heading" style="top:60px"><b>It lives in a little world</b><span>that follows your day, and scrolls by while Claude works</span></div>
+    <div class="big" id="worldZoom" style="transform: scale(4); margin-top: 70px"><div id="world"></div></div>
+    <div style="height:130px"></div>
+    <div class="clock" id="clock">07:30 · morning</div>
+  </div>
+
+  <div class="layer" id="s2">
+    <div class="heading" style="top:90px"><b>Calmer narration</b><span>a line when the work changes, a quiet summary in long turns</span></div>
+    <div class="band sband" id="bandA" style="transform: scale(1.75)"><div id="petA"></div><div class="l1" id="l1A"></div><div class="l2" id="l2A"></div></div>
+    <div class="tip" id="tipA" style="top: 520px">five reads in a row → <code>one line</code></div>
+  </div>
+
+  <div class="layer" id="s3">
+    <div class="heading" style="top:90px"><b>Cheers &amp; groans</b><span>what matters breaks through, in colour</span></div>
+    <div class="band sband" id="bandB" style="transform: scale(1.75)"><div id="petB"></div><div class="l1" id="l1B"></div><div class="l2" id="l2B"></div></div>
+  </div>
+
+  <div class="layer" id="s4">
+    <div class="heading" style="top:90px"><b>Waves when Claude needs you</b><span>on a permission prompt, and when a long turn is done</span></div>
+    <div class="band sband" id="bandC" style="transform: scale(1.75)"><div id="petC"></div><div class="l1" id="l1C"></div><div class="l2" id="l2C"></div></div>
+    <div class="tip" id="tipC" style="top: 520px">🔔 <code>/pet sound on</code> for a soft chirp</div>
+  </div>
+
+  <div class="layer" id="s5">
+    <div class="heading" style="top:90px"><b>A calm note on your limits</b><span>once at 80% and again at 95%, nothing more</span></div>
+    <div class="band sband" id="bandD" style="transform: scale(1.75)"><div id="petD"></div><div class="l1" id="l1D"></div><div class="l2" id="l2D"></div></div>
+  </div>
+
+  <div class="layer" id="s6">
+    <div class="heading" style="top:60px"><b>Dressed for the season</b><span>it puts the hat on by itself</span></div>
+    <div class="hatrow"><div id="hat1"><div class="big" style="transform: scale(2.6)"><div id="hatA"></div></div>Halloween</div><div id="hat2"><div class="big" style="transform: scale(2.6)"><div id="hatB"></div></div>Christmas</div><div id="hat3"><div class="big" style="transform: scale(2.6)"><div id="hatC"></div></div>birthday &amp; New Year</div></div>
+  </div>
+
+  <div class="layer" id="s7">
+    <div class="heading" style="top:60px"><b>Share your pet</b><span><code>/pet card</code> saves a picture of it in its world</span></div>
+    <div id="cardWrap" style="left:340px; top:200px"><div id="card"></div></div>
+  </div>
+
+  <div class="layer" id="s8">
+    <div class="heading" style="top:60px"><b>One pet, every session</b><span>the same name, colour and stats in every window</span></div>
+    <div class="win" id="w1" style="left:70px; top:250px"><div class="bar"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><span>terminal</span></div><div class="band"><div id="petW1"></div><div class="l1" id="l1W1"></div></div></div>
+    <div class="win" id="w2" style="left:460px; top:250px"><div class="bar"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><span>desktop app</span></div><div class="band"><div id="petW2"></div><div class="l1" id="l1W2"></div></div></div>
+    <div class="win" id="w3" style="left:850px; top:250px"><div class="bar"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><span>another project</span></div><div class="band"><div id="petW3"></div><div class="l1" id="l1W3"></div></div></div>
+    <div class="tip" id="tipE" style="top: 480px">kept in <code>~/.claude/pixel-pet.json</code></div>
+    <div class="tip" id="tipF" style="top: 540px">new pets hatch with a random name: Mochi · Pixel · Pip · Nibbles · Byte…</div>
+  </div>
+
+  <div class="layer center" id="s9" style="gap: 12px">
+    <div class="heading" style="top:60px"><b>Make it yours</b><span>everything optional, off by default</span></div>
+    <div style="height: 80px"></div>
+    <div class="chipcmd" id="c1"><code>/pet scene off</code>just the pet, no background</div>
+    <div class="chipcmd" id="c2"><code>/pet calm on</code>small motion, no scrolling</div>
+    <div class="chipcmd" id="c3"><code>/pet breaks on</code>a nudge to stretch, and to sleep</div>
+    <div class="chipcmd" id="c4"><code>/pet project on</code>a different pet per project</div>
+    <div class="chipcmd" id="c5"><code>/pet outfit santa</code>pick a hat any time</div>
+  </div>
+
+  <div class="layer center" id="s10" style="gap: 22px">
+    <div class="big" id="o0" style="transform: scale(2.2); margin: 34px 0"><div id="outroPet"></div></div>
+    <h1 id="o1" style="font-size:72px">pixel-pet 0.3</h1>
+    <div class="code" id="o2"><div><s>›</s> <i>/plugin</i> marketplace add lakmadev/pixel-pet</div><div><s>›</s> <i>/plugin</i> install pixel-pet@pixel-pet</div></div>
+    <div class="tag" id="o3" style="font-size:19px">Already have it? Update it from <code style="color:#ecedf2">/plugin</code>.</div>
+    <div class="tag" id="o4" style="font-size:19px">Free &amp; open source · <b style="color:#ecedf2">github.com/lakmadev/claude-mods</b></div>
+  </div>
+
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <div id="progress"></div>
+</div>
+<script src="assets.js"></script>
+<script src="engine.js"></script>
+<script>
+const S = [0, 4350, 10450, 17280, 21680, 26780, 30800, 34200, 37600, 42430, 46900], END = 53000
+const P = A.pets, L = A.lines, ST = A.still
+const span = i => [S[i], S[i + 1] ?? END + 1000]
+const day = ['meadow', 'desert', 'savanna', 'skyline', 'moon']
+const clocks = ['07:30 · morning', '14:30 · afternoon', '19:30 · evening', '22:30 · night', '02:30 · after midnight']
+const draws = [
+  habitat($('hero'), [{ at: 0, scene: 'meadow' }], [[0, END]], [{ at: 0, svg: P.heroHappy }]),
+  habitat($('world'), day.map((scene, i) => ({ at: S[1] + 300 + i * 1150, scene })), [[S[1], S[2]]], [{ at: 0, svg: P.idleTeal }]),
+  // calmer narration
+  habitat($('petA'), [{ at: 0, scene: 'meadow' }], [[S[2], S[3]]], [{ at: 0, svg: P.workingPlain }]),
+  track($('l1A'), [{ at: 0, svg: ST[3] }, { at: S[2] + 3800, svg: A.slides.deep }]),
+  track($('l2A'), [{ at: 0, svg: A.line2[0].svg }]),
+  // cheers and groans
+  habitat($('petB'), [{ at: 0, scene: 'lava' }, { at: S[3] + 2100, scene: 'meadow' }], [[S[3], S[4]]], [{ at: 0, svg: P.oops }, { at: S[3] + 2100, svg: P.happy }]),
+  track($('l1B'), [{ at: 0, svg: ST[6] }, { at: S[3] + 2100, svg: A.slides.pass }]),
+  track($('l2B'), [{ at: 0, svg: A.line2[0].svg }]),
+  // calling
+  habitat($('petC'), [{ at: 0, scene: 'meadow' }], [], [{ at: 0, svg: P.calling }, { at: S[4] + 3000, svg: P.happy2 }]),
+  track($('l1C'), [{ at: 0, svg: ST[9] }, { at: S[4] + 3000, svg: A.slides.done }]),
+  track($('l2C'), [{ at: 0, svg: A.line2[0].svg }]),
+  // limits
+  habitat($('petD'), [{ at: 0, scene: 'meadow' }], [[S[5], S[6]]], [{ at: 0, svg: P.workingPlain }]),
+  track($('l1D'), [{ at: 0, svg: ST[12] }]),
+  track($('l2D'), [{ at: 0, svg: A.meterLimit }]),
+  // hats
+  habitat($('hatA'), [{ at: 0, scene: 'savanna' }], [[S[6], S[7]]], [{ at: 0, svg: P.pumpkin }]),
+  habitat($('hatB'), [{ at: 0, scene: 'snow' }], [[S[6], S[7]]], [{ at: 0, svg: P.santa }]),
+  habitat($('hatC'), [{ at: 0, scene: 'skyline' }], [[S[6], S[7]]], [{ at: 0, svg: P.party }]),
+  // one pet everywhere
+  ...['W1', 'W2', 'W3'].flatMap((w, n) => [
+    habitat($(`pet${w}`), [{ at: 0, scene: 'meadow' }], [], [{ at: 0, svg: P.idleTeal }]),
+    track($(`l1${w}`), [{ at: 0, svg: ST[15] }]),
+  ]),
+  habitat($('outroPet'), [{ at: 0, scene: 'skyline' }], [[S[10] - 500, END + 1000]], [{ at: 0, svg: P.happy2 }]),
+]
+$('card').innerHTML = A.card
+
+function seek(t) {
+  drift(t)
+  $('progress').style.width = `${(t / END) * 100}%`
+  for (const draw of draws) draw(t)
+  const L0 = layer(t, ['s0', ...span(0)])
+  L0.el.style.transform = `scale(${lerp(1.12, 1, out(prog(t, 0, 3500))) + L0.o * .25})`
+  $('ver').style.opacity = out(prog(t, 900, 600))
+  $('ver').style.transform = `scale(${back(prog(t, 900, 600))})`
+
+  const L1 = layer(t, ['s1', ...span(1)])
+  L1.el.style.transform = `scale(${lerp(.92, 1, out(L1.k)) + L1.o * .2})`
+  const i = clamp(Math.floor((t - S[1] - 520) / 1150), 0, 4)
+  $('clock').textContent = clocks[i]
+
+  for (const [n, id] of [[2, 's2'], [3, 's3'], [4, 's4'], [5, 's5']]) {
+    const l = layer(t, [id, ...span(n)])
+    l.el.style.transform = `scale(${lerp(.94, 1, out(l.k)) + l.o * .15})`
+  }
+  for (const [id, at] of [['tipA', S[2] + 1700], ['tipC', S[4] + 1500], ['tipE', S[8] + 1400], ['tipF', S[8] + 2300]]) {
+    const k = out(prog(t, at, 500))
+    $(id).style.opacity = k
+    $(id).style.transform = `translate(-50%, ${(1 - k) * 18}px)`
+  }
+
+  const L6 = layer(t, ['s6', ...span(6)])
+  L6.el.style.transform = `scale(${1 + L6.o * .15})`
+  ;['hat1', 'hat2', 'hat3'].forEach((id, n) => {
+    const k = prog(t, S[6] + 250 + n * 220, 600)
+    $(id).style.opacity = clamp(k * 2)
+    $(id).style.transform = `scale(${back(k)}) translateY(${(1 - out(k)) * 30}px)`
+  })
+
+  const L7 = layer(t, ['s7', ...span(7)])
+  const cIn = back(prog(t, S[7] + 200, 800))
+  $('cardWrap').style.opacity = clamp(prog(t, S[7] + 200, 300))
+  $('cardWrap').style.transform = `translate(${(1 - cIn) * 280}px, ${(1 - cIn) * 40}px) rotate(${(1 - cIn) * 8 - 2}deg) scale(${.82 + .18 * cIn})`
+  L7.el.style.transform = `scale(${1 + L7.o * .15})`
+
+  const L8 = layer(t, ['s8', ...span(8)])
+  ;['w1', 'w2', 'w3'].forEach((id, n) => {
+    const k = prog(t, S[8] + 200 + n * 250, 650)
+    $(id).style.opacity = clamp(k * 2)
+    $(id).style.transform = `translateY(${(1 - back(k)) * 40}px) scale(${.9 + .1 * out(k)})`
+  })
+  L8.el.style.transform = `scale(${1 + L8.o * .15})`
+
+  const L9 = layer(t, ['s9', ...span(9)])
+  ;['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, n) => {
+    const k = out(prog(t, S[9] + 250 + n * 260, 500))
+    $(id).style.opacity = k
+    $(id).style.transform = `translateX(${(1 - k) * -40}px)`
+  })
+  L9.el.style.transform = `scale(${1 + L9.o * .15})`
+
+  const L10 = layer(t, ['s10', S[10], END + 1000])
+  L10.el.style.transform = `scale(${lerp(1.08, 1, out(prog(t, S[10] - 350, 1600)))})`
+  ;['o0', 'o1', 'o2', 'o3', 'o4'].forEach((id, n) => {
+    const k = out(prog(t, S[10] + n * 160, 700))
+    $(id).style.opacity = k
+    $(id).style.translate = `0 ${(1 - k) * 24}px`
+  })
+}
+run(seek, END)
+</script>
